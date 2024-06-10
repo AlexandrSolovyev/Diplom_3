@@ -11,10 +11,6 @@ class OrderFeedPage(BasePage):
     def open_page(self):
         self.open_url(Urls.MAIN_PAGE + Urls.FEED_PAGE)
 
-    @allure.step('Нажатие на заказ в ленте заказов')
-    def click_order(self):
-        self.click_element_if_clickable(OPL.ORDER_OBJECT)
-
     @allure.step("Проверка нахождение идентификатора заказа в ленте")
     def found_order_at_feed(self, order_id):
         elements = self.find_until_all_elements_located(OPL.ORDERS_AT_FEED)

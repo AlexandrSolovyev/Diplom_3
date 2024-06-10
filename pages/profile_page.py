@@ -1,26 +1,20 @@
 import allure
 
-import helper
 from data import Urls
 from pages.base_page import BasePage
 from locators.profile_locators import ProfileLocators as PL
 from locators.login_locators import LoginLocators as LL
+from conftest import test_data
 
 
 class ProfilePage(BasePage):
-
-    @allure.step('Открытие страницы')
-    def open_profile_page(self):
-        self.find_element_visibility(PL.BUTTON_PROFILE_PAGE)
-        button_profile = self.find_element_visibility(PL.BUTTON_PROFILE_PAGE)
-        self.driver.execute_script('arguments[0].click();', button_profile)
 
     @allure.step('Проверка наличия элементов на открытой странице')
     def check_open_page(self):
         self.find_element_visibility(PL.BUTTON_PROFILE)
         return self.check_exist_element(PL.BUTTON_PROFILE)
 
-    @allure.step('Открытие страницы "История заказов"')
+    @allure.step('Открытие страницы "История заказов" с проверкой открытия')
     def open_history_page(self):
         self.find_element_visibility(PL.BUTTON_HISTORY)
         button_history = self.find_element_visibility(PL.BUTTON_HISTORY)
@@ -39,7 +33,7 @@ class ProfilePage(BasePage):
                 return True
         return True
 
-    @allure.step('Нажатие кнопки "Выход"')
+    @allure.step('Нажатие кнопки "Выход" с проверкой выхода')
     def exit(self):
         button_exit = self.find_element_visibility(PL.BUTTON_EXIT)
         self.driver.execute_script('arguments[0].click();', button_exit)
@@ -50,10 +44,10 @@ class ProfilePage(BasePage):
             return False
 
     @allure.step('Авторизация')
-    def authorization(self):
-        name = helper.helper_name()
-        password = helper.helper_password()
-        email = helper.helper_email()
+    def authorization(self, test_data):
+        name = test_data['name']
+        password = test_data['password']
+        email = test_data['email']
 
         self.open_url(Urls.MAIN_PAGE + Urls.REGISTER)
         self.find_element_visibility(LL.FIELD_NAME_FOR_REG)
@@ -72,6 +66,6 @@ class ProfilePage(BasePage):
         self.click_element_if_clickable(LL.BUTTON_FOR_LOGIN)
         self.find_element_not_visibility(LL.BUTTON_FOR_LOGIN)
 
-    def precondition_for_tests(self):
-        self.authorization()
-        self.open_profile_page()
+    def precondition_for_tests(self, test_data):
+        self.authorization(test_data)
+        self.click_element_if_clickable(PL.BUTTON_PROFILE_PAGE)

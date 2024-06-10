@@ -16,16 +16,6 @@ class MainPage(BasePage):
     def open_main_page(self):
         self.open_url(Urls.MAIN_PAGE)
 
-    @allure.step('Нажатие на кнопку "Конструктор"')
-    def click_button_constructor(self):
-        button_constructor = self.find_element_visibility(MPL.BUTTON_CONSTRUCTOR)
-        self.driver.execute_script('arguments[0].click();', button_constructor)
-
-    @allure.step('Нажатие на кнопку "Лента Заказов"')
-    def click_button_order_feed(self):
-        button_order_feed = self.find_element_visibility(MPL.BUTTON_ORDER_FEED)
-        self.driver.execute_script('arguments[0].click();', button_order_feed)
-
     @allure.step('Проверка открытия страницы после нажатия на кнопку "Лента Заказов"')
     def check_title_order_feed(self):
         return self.check_exist_element(OPL.TITLE_ORDER_PAGE)
@@ -34,11 +24,6 @@ class MainPage(BasePage):
     def check_title_constructor(self):
         return self.check_exist_element(MPL.TITLE_CONSTRUCTOR)
 
-    @allure.step('Нажатие на кнопку булки "R2-D3"')
-    def click_button_ing_r3_d3(self):
-        button_ingredient_r2_d3 = self.find_element_visibility(MPL.BUTTON_INGREDIENT_R2_D3)
-        self.driver.execute_script('arguments[0].click();', button_ingredient_r2_d3)
-
     @allure.step('Проверка открытия окна ингредиента')
     def check_clickable_order_button(self):
         if self.find_element_clickable(MPL.BUTTON_ORDER_FEED):
@@ -46,15 +31,10 @@ class MainPage(BasePage):
         else:
             return False
 
-    @allure.step('Нажатие на крестик в окне ингредиента')
-    def click_close_button(self):
-        button_close = self.find_element_visibility(MPL.BUTTON_CLOSE)
-        self.driver.execute_script('arguments[0].click();', button_close)
-
     @allure.step('Предусловие: открытие главной страницы, открытие окна ингредиента')
     def precondition_close_window(self):
         self.open_main_page()
-        self.click_button_ing_r3_d3()
+        self.click_element_if_clickable(MPL.BUTTON_INGREDIENT_R2_D3)
 
     @allure.step('Получение значения счетчика ингредиента')
     def get_count_value(self):
@@ -64,11 +44,6 @@ class MainPage(BasePage):
     def add_filling_to_order(self):
         self.find_element_clickable(MPL.BUTTON_INGREDIENT_R2_D3)
         self.drag_and_drop_on_element(MPL.BUTTON_INGREDIENT_R2_D3, MPL.BASKET_ORDER)
-
-    @allure.step('Нажатие на кнопку "Оформить заказ"')
-    def click_order_button(self):
-        button_order = self.find_element_visibility(MPL.BUTTON_ORDER)
-        self.driver.execute_script('arguments[0].click();', button_order)
 
     @allure.step('Получение текста из окна с информацией о только что оформленном заказе')
     def check_placing_order(self):
@@ -82,9 +57,3 @@ class MainPage(BasePage):
         while order_id == '9999':
             order_id = self.get_text(MPL.ID_ORDER)
         return f"{order_id}"
-
-    @allure.step("Закрытие окна после создания заказа")
-    def click_close_window_order(self):
-        self.find_element_clickable(MPL.BUTTON_CLOSE)
-        button_close = self.find_element_visibility(MPL.BUTTON_CLOSE)
-        self.driver.execute_script('arguments[0].click();', button_close)

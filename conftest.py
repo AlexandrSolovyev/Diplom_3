@@ -2,6 +2,7 @@ import pytest
 
 from selenium import webdriver
 from data import Urls
+from helper import helper_password, helper_name, helper_email
 
 
 @pytest.fixture(params=['firefox', 'chrome'])
@@ -18,3 +19,14 @@ def driver(request):
     browser.get(Urls.MAIN_PAGE)
     yield browser
     browser.quit()
+
+
+@pytest.fixture
+def test_data():
+    data = {
+        'password': helper_password(),
+        'email': helper_email(),
+        'name': helper_name()
+    }
+
+    return data
